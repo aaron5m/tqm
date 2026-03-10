@@ -1,6 +1,13 @@
 version: "3"
 
 services:
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        - TARGET_DIR=${SERVER_PATH}
+
   node:
     build: ./node
     depends_on:

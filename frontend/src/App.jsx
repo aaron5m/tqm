@@ -1,35 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import styles from './Signup.module.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [user, setUser] = useState({ username: '', email: '', password_input: '' });
+
+  const submit = async (e) => {
+    e.preventDefault();
+    await fetch('http://localhost:8000/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: user.username, // Key must match FastAPI field
+        email: user.email,
+        password_input: user.password_input
+      })
+    });
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className={styles.container}>
+      <div className={styles.card}>
+      <h1 className={styles.centrify}>The American<br></br>Quarter Millennium</h1>
+        <form className={styles.form} onSubmit={submit}>
+          <input 
+            className={styles.input}
+            placeholder="Username" 
+            onChange={e => setUser({...user, username: e.target.value})} 
+          />
+          <input 
+            className={styles.input}
+            type="email" 
+            placeholder="Email" 
+            onChange={e => setUser({...user, email: e.target.value})} 
+          />
+          <input 
+            className={styles.input}
+            type="password" 
+            placeholder="Password" 
+            onChange={e => setUser({...user, password_input: e.target.value})} 
+          />
+          <button className={styles.button} type="submit">Sign Up</button>
+        </form>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
-
-export default App

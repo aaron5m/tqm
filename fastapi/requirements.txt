@@ -3,3 +3,5 @@ uvicorn
 sqlmodel
 alembic
 psycopg2-binary
+passlib
+argon2-cffi

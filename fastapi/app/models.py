@@ -1,7 +1,11 @@
-from sqlmodel import SQLModel, Field
+from sqlmodel import create_engine, SQLModel, Field
 from datetime import datetime
 from typing import Optional, List
 from sqlalchemy import Column, JSON
+import os
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+engine = create_engine(DATABASE_URL)
 
 class Link(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -19,5 +23,5 @@ class User(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     username: str = Field(index=True, unique=True)
     email: str = Field(unique=True)
-    password_hash: str  # Never store plain text passwords!
+    password_input: str  # Never store plain text passwords!
     timestamp: datetime = Field(default_factory=datetime.utcnow)

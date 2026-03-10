@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  node:
+    ports:
+      - "3000:3000"
+    # Mount source code for live development
+    volumes:
+      - ./node:/app
+      # Keep node_modules inside the container so they are not overwritten
+      - node_modules:/app/node_modules
+
+  fastapi:
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./fastapi:/app
+      - fastapi_venv:/app/.venv  # optional: if using a venv for Python dependencies
+
+volumes:
+  node_modules:
+  fastapi_venv:
