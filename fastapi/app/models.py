@@ -14,3 +14,10 @@ class Link(SQLModel, table=True):
     
     # For simplicity in prototyping, we use a JSON-type column for photo URLs
     photos: Optional[List[str]] = Field(default=[], sa_column=Column(JSON))
+
+class User(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    username: str = Field(index=True, unique=True)
+    email: str = Field(unique=True)
+    password_hash: str  # Never store plain text passwords!
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
