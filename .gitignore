@@ -22,3 +22,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Hidden files
+ .DS_Store
+**/.DS_Store
+password.env
+.env
+**.env
+.env.*
+docker-compose.override.yml
