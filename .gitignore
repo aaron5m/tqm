@@ -1,6 +1,7 @@
 .DS_Store
 **/.DS_Store
-site/*
-!site/README.md
 password.env
+.env
 **.env
+.env.*
+docker-compose.override.yml
