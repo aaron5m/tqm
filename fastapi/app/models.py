@@ -15,7 +15,7 @@ class Link(SQLModel, table=True):
     # For simplicity in prototyping, we use a JSON-type column for photo URLs
     photos: Optional[List[str]] = Field(default=[], sa_column=Column(JSON))
 
-class User(SQLModel, table=True):
+class Compeer(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     username: str = Field(index=True, unique=True)
     email: str = Field(unique=True)
