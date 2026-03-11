@@ -1,7 +1,8 @@
 from fastapi import FastAPI, Depends
 from sqlmodel import Session, select
 from .auth import hash_password
-from .models import engine, User # SQLModel class
+from .models import User # SQLModel class
+from .db import engine
 # THIS MIDDLEWARE IS SAFE ENOUGH BUT SHOULD BE REMOVED
 from fastapi.middleware.cors import CORSMiddleware
 # REMOVE MIDDLEWARE ABOVE

@@ -1,11 +1,7 @@
-from sqlmodel import create_engine, SQLModel, Field
+from sqlmodel import SQLModel, Field
 from datetime import datetime
 from typing import Optional, List
 from sqlalchemy import Column, JSON
-import os
-
-DATABASE_URL = os.getenv("DATABASE_URL")
-engine = create_engine(DATABASE_URL)
 
 class Link(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
