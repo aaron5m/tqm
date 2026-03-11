@@ -12,7 +12,7 @@ app = FastAPI()
 # THIS MIDDLEWARE IS SAFE ENOUGH BUT SHOULD BE REMOVED
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"], # Your React dev URL
+    allow_origins=["http://localhost:5174"], # Your React dev URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

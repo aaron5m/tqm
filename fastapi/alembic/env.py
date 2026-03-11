@@ -7,6 +7,7 @@ from alembic import context
 
 from sqlmodel import SQLModel
 import app.models
+
 import os
 
 # this is the Alembic Config object, which provides
@@ -18,7 +19,7 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# set the right url for postgres
+# Proper call to postgres
 config.set_main_option("sqlalchemy.url", os.getenv("DATABASE_URL"))
 
 # add your model's MetaData object here
