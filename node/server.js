@@ -18,6 +18,10 @@ app.get("/api/test", (req, res) => {
   res.json({ message: "Node API working" });
 });
 
+app.get("/auth/status", (req, res) => {
+  res.json({ loggedIn: true, username: "aaron" });
+});
+
 app.listen(3000, "0.0.0.0", () => {
   console.log("Node API running on port 3000");
 });
