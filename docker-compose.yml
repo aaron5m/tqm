@@ -4,7 +4,10 @@ services:
     build:
       context: ./frontend
       args:
-        - TARGET_DIR=${SERVER_PATH}
+        OUTPUT_PATH: ${SERVER_PATH}
+    volumes:
+      - ./html:/app/dist
+    command: sh -c "npm install && npm run build && tail -f /dev/null"
 
   node:
     build: ./node

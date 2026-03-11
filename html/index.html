@@ -1,93 +1,14 @@
-<!DOCTYPE html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            text-align: center;
-            background-color: white;
-        }
-        .center-1200 {
-            width: 100%;
-            max-width: 1200px;
-            display: inline-block;
-        }
-        .center-900 {
-            width: 100%;
-            max-width: 900px;
-            display: inline-block;
-        }
-        .center-800 {
-            width: 100%;
-            max-width: 800px;
-            display: inline-block;
-        }
-        .shirt-block {
-            display: inline-block;
-            width: 80%;
-            max-width: 800px;
-            margin: 20px;
-            padding: 10px;
-            border: solid black 2px;
-        }
-        .shirt-image {
-            width: 100%;
-            object-fit: contain;
-        }
-    </style>
-
-</head>
-<body>
-    <h3>1776 - 2026</h3>
-    <h1>The American Quarter Millennium</h1>
-    <img src="images/taqm_bnw_front_logo_watermark_com.png" class="center-1200"/>
-    <br>
-    <div class="shirt-block">
-        <a href="https://weaqm.preview.teespring.com/listing/get-the-american-quarter-mille?product=2&variation=568">
-            <img src="images/taqm_red_800.jpg" class="shirt-image" />
-        </a>
-        <p>$17.76</p>
-    </div>
-    <div class="shirt-block">
-        <a href="https://weaqm.creator-spring.com/listing/the-american-quarter-millenniu?product=2&variation=2122">
-            <img src="images/taqm_white_800.jpg" class="shirt-image" />
-        </a>
-        <p>$17.76</p>
-    </div>
-    <div class="shirt-block">
-        <a href="https://weaqm.preview.teespring.com/listing/new-the-american-quarter-mille?product=2&variation=569">
-            <img src="images/taqm_blue_800.jpg" class="shirt-image"/>
-        </a>
-        <p>$17.76</p>
-    </div>
-    <div class="shirt-block">
-        <a href="https://weaqm.preview.teespring.com/listing/red-white-blue-floral-women?product=87&variation=2324">
-            <img src="images/taqm_floral_800.jpg" class="shirt-image"/>
-        </a>
-        <p>$17.76</p>
-    </div>
-    <br>
-    <img src="images/taqm_bnw_back_logo_watermark_com.png" class="center-800"/>
-    <br>
-
-
-  <h1>API Test</h1>
-  <button id="btn">Call Node API</button>
-  <pre id="output"></pre>
-
-  <script>
-    const btn = document.getElementById("btn");
-    const output = document.getElementById("output");
-
-    btn.addEventListener("click", async () => {
-      try {
-        const res = await fetch("/api/test");
-        const data = await res.json();
-        output.textContent = JSON.stringify(data, null, 2);
-      } catch (err) {
-        output.textContent = "Error: " + err;
-      }
-    });
-  </script>
-
-
-</body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>frontend</title>
+    <script type="module" crossorigin src="/assets/index-DtHkE17G.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BsjWHOlP.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
