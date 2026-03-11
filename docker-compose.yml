@@ -17,6 +17,8 @@ services:
       FASTAPI_URL: http://fastapi:8000
     networks:
       - backend
+    volumes:
+      - ./images:/app/uploads
 
   fastapi:
     build: ./fastapi
