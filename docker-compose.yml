@@ -1,14 +1,4 @@
 services:
-
-  frontend:
-    build:
-      context: ./frontend
-      args:
-        OUTPUT_PATH: ${SERVER_PATH}
-    volumes:
-      - ./html:/app/dist
-    command: sh -c "npm install && npm run build && tail -f /dev/null"
-
   node:
     build: ./node
     depends_on:
@@ -50,6 +40,14 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - backend
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - node
+    volumes:
+      - ./html:/app/dist
+    command: sh -c "npm run build"
 
 volumes:
   postgres_data:

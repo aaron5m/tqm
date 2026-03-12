@@ -1,8 +1,30 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { useState, useEffect } from 'react';
 
 import Signup from "./Signup";
+import Signin from "./Signin";
 import Upload from "./Upload";
+import Items from "./Items";
 
+
+function App() {
+
+  let isSignedIn = true;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Items />} />
+        <Route
+          path="/upload"
+          element={isSignedIn ? <Upload /> : <Signin />}
+        />
+        <Route path="/signup" element={<Signup />} />
+      </Routes>
+    </BrowserRouter>
+  )
+}
+
+/*
 function App() {
   const [user, setUser] = useState(null);
 
@@ -18,5 +40,6 @@ function App() {
 
   return <Upload />;
 }
+*/
 
 export default App;

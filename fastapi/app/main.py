@@ -1,5 +1,6 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from sqlmodel import Session, select
+from sqlalchemy import text
 from .auth import hash_password
 from .models import Link, Compeer # SQLModel class
 from .db import engine
@@ -13,13 +14,14 @@ app = FastAPI()
 # THIS MIDDLEWARE IS SAFE ENOUGH BUT SHOULD BE REMOVED
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"], # Your React dev URL
+    allow_origins=["http://localhost:5173", "http://localhost:8080", "http://localhost:5174"], # Your React dev URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 # REMOVE THE MIDDLEWARE ABOVE
 
+# SIGNUP PROCESSING
 @app.post("/signup")
 def create_user(user_data: Compeer):
     with Session(engine) as session:
@@ -32,6 +34,7 @@ def create_user(user_data: Compeer):
         session.refresh(user_data)
         return {"status": "success", "username": user_data.username}
 
+# UPLOAD PROCESSING
 @app.post("/links")
 def create_link(link_data: dict):
     """
@@ -55,5 +58,18 @@ def create_link(link_data: dict):
             session.commit()
             session.refresh(link)
         return {"id": link.id, "status": "created"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# SEE FOUR RENTRIES
+@app.get("/items")
+def get_items():
+    try:
+        with Session(engine) as session:
+            result = session.execute(
+                text("SELECT * FROM link ORDER BY id LIMIT 4")
+            )
+            items = [dict(row._mapping) for row in result]
+        return {"items": items}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

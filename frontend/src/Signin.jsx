@@ -1,21 +1,14 @@
 import { useState } from 'react';
 import styles from "./index.module.css"
 
-export default function Signup() {
+export default function Signin() {
   const [user, setUser] = useState({ username: '', email: '', password_input: '' });
   const [emailInput, setEmailInput] = useState("");
   const [error, setError] = useState("");
 
-  function validateEmailInput(e) {
-    const val = e.target.value;
-    console.log("whatever");
-    setEmailInput(val);
-    setError(/\S+@\S+\.\S+/.test(val) ? "" : "Invalid email");
-  }
-
   const submit = async (e) => {
     e.preventDefault();
-    await fetch('http://localhost:8000/signup', {
+    await fetch('http://localhost:8000/signin', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -38,24 +31,14 @@ export default function Signup() {
           />
           <input 
             className={styles.input}
-            type="email" 
-            value={emailInput}
-            placeholder="Email" 
-            onChange={ (e) => {
-                validateEmailInput(e);
-                setUser({...user, email: e.target.value})
-              }
-            }
-            required
-          />
-          {error && <p style={{ color: "red" }}>{error}</p>}
-          <input 
-            className={styles.input}
             type="password" 
             placeholder="Password" 
             onChange={e => setUser({...user, password_input: e.target.value})} 
           />
-          <button className={styles.button} type="submit">Sign Up</button>
+          <button className={styles.button} type="submit">Sign In</button>
+          <p>
+            <a href="signup">Or Sign Up Now</a>
+          </p>
         </form>
       </div>
     </div>

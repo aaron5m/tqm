@@ -5,8 +5,10 @@ const fs = require("fs");
 const axios = require("axios");
 const cors = require("cors");
 
+
 const app = express();
 app.use(express.json());
+
 
 // Allow local only cors
 app.use(cors({
@@ -14,12 +16,13 @@ app.use(cors({
   credentials: true,
 }));
 
+
 // Authorization
 app.get("/auth/status", (req, res) => {
   res.json({ loggedIn: true, username: "aaron" });
 });
 
-// Uploads
+// UPLOADS
 const uploadDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 

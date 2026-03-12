@@ -6,7 +6,7 @@ services:
     volumes:
       - ./node:/app
       # Keep node_modules inside the container so they are not overwritten
-      - node_modules:/app/node_modules
+      - ./node/node_modules:/app/node_modules
 
   fastapi:
     ports:
@@ -15,6 +15,11 @@ services:
       - ./fastapi:/app
       - fastapi_venv:/app/.venv  # optional: if using a venv for Python dependencies
 
+  #frontend:
+    #volumes:
+      # Keep node_modules inside the container so they are not overwritten
+      - ./frontend/node_modules:/app/node_modules
+
 volumes:
-  node_modules:
+  # node_modules:
   fastapi_venv:
