@@ -9,6 +9,8 @@ services:
       - backend
     volumes:
       - ./images:/app/uploads
+    env_file:
+      - .env
 
   fastapi:
     build: ./fastapi

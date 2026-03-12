@@ -15,15 +15,18 @@ export default function Signup() {
 
   const submit = async (e) => {
     e.preventDefault();
-    await fetch('http://localhost:8000/signup', {
+    await fetch('http://localhost:3000/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify({
-        username: user.username, // Key must match FastAPI field
+        username: user.username, 
         email: user.email,
         password_input: user.password_input
       })
-    });
+    })
+    .then(res => res.json())
+    .then(data => console.log(data));
   };
 
   return (
