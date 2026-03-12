@@ -1,25 +1,30 @@
+import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import styles from "./index.module.css"
 
 export default function Signin() {
+  const navigate = useNavigate();
   const [user, setUser] = useState({ username: '', email: '', password_input: '' });
   const [emailInput, setEmailInput] = useState("");
   const [error, setError] = useState("");
 
   const submit = async (e) => {
     e.preventDefault();
-    await fetch('http://localhost:3000/signin', {
+    const res = await fetch('http://localhost:3000/signin', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        username: user.username, // Key must match FastAPI field
+        username: user.username, 
         email: user.email,
         password_input: user.password_input
       })
-    })
-    .then(res => res.json())
-    .then(data => console.log(data));
+    });
+
+    if (res.ok) {
+      window.location.href = "/upload";
+      // navigate("/"); // refresh
+    }
   };
 
   return (

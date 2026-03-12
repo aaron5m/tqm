@@ -30,6 +30,16 @@ def compeer(username: str = Query(...)):
     exists = check_username(username)
     return {"exists": exists}
 
+# GET PASSWORD HASH FOR A USERNAME
+@app.get("/get-hash")
+def get_hash(username: str = Query(...)):
+    with Session(engine) as session:
+        statement = select(Compeer).where(Compeer.username == username)
+        user = session.exec(statement).first()
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        return {"hash": user.password_input}
+
 # SIGNUP PROCESSING
 @app.post("/signup")
 def create_user(user_data: Compeer):

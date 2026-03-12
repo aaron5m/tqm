@@ -1,8 +1,8 @@
 /*
  * All return true or false
  * isEightChars
- * usernameExists
- * isNewValidUsername
+ * isNewUsername
+ * isExistingUsername
  * isEmail
  * 
 */
@@ -11,20 +11,26 @@ export function isEightChars(str) {
   return /^[A-Za-z0-9]{8,}$/.test(str);
 }
 
-export async function usernameExists(username) {
+export async function isNewUsername(username) {
   try {
-    const res = await fetch(`http://fastapi:8000/compeer?username=${encodeURIComponent(username)}`);
+    const res = await fetch(`http://fastapi:8000/compeer?username=${username}`);
     const data = await res.json();
-    return data.exists === true;
+    return data.exists === false; // true only if username is NOT found
   } catch (err) {
-    return true; // treat failures as "username exists" to block signup
+    console.error("Error checking username:", err);
+    return false; // treat failures as "username not valid"
   }
 }
 
-export async function isNewValidUsername(username) {
-  if (!isEightChars(username)) return false;
-  if (await usernameExists(username)) return false;
-  return true;
+export async function isExistingUsername(username) {
+  try {
+    const res = await fetch(`http://fastapi:8000/compeer?username=${username}`);
+    const data = await res.json();
+    return data.exists === true; 
+  } catch (err) {
+    console.error("Error checking username:", err);
+    return false; // treat failures as "username not valid"
+  }
 }
 
 export function isEmail(str) {

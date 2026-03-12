@@ -22,12 +22,13 @@ app.use(cors({
 }));
 
 
+
 // SIGNUP
 app.post("/signup", async(req, res) => {
   const { username, email, password_input } = req.body;
   
   // validate
-  if (!(await utils.isNewValidUsername(username))) {
+  if (!utils.isEightChars(username) || !(await utils.isNewUsername(username))) {
     return res.status(401).json({ message: "Invalid username" });
   }
   if (!utils.isEmail(email)) {
@@ -63,13 +64,35 @@ app.post("/signup", async(req, res) => {
 });
 
 
-// SIGNIN
-app.post("/signin", (req, res) => {
-  const { username, password_input } = req.body;
 
-  // validate credentials (omitted for brevity)
-  if (username !== "test" || password_input !== "123") {
-    return res.status(401).json({ message: "Invalid credentials" });
+// SIGNIN
+app.post("/signin", async(req, res) => {
+  const { username, password_input } = req.body;
+  
+  // validate
+  if (!utils.isEightChars(username) || !(await utils.isExistingUsername(username))) {
+    return res.status(401).json({ message: "Invalid username" });
+  }
+  if (!utils.isEightChars(password_input)) {
+    return res.status(401).json({ message: "Invalid password" });
+  }
+
+  // hash and compare with db hash
+  let match = false;
+  try {
+    const response = await fetch(`http://fastapi:8000/get-hash?username=${username}`);
+    if (!response.ok) return false;
+    const data = await response.json();
+    const storedHash = data.hash;
+    if (!storedHash) return false;
+    match = await bcrypt.compare(password_input, storedHash);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" + err });
+    return false;
+  }
+  if (!match) {
+    res.status(401).json({ message: "Invalid password" });
+    return false;
   }
 
   const token = jwt.sign(
@@ -84,15 +107,26 @@ app.post("/signin", (req, res) => {
     maxAge: 3600 * 1000 * 24 * 7
   });
 
-  res.json({ message: "Logged in" });
+  res.status(200).json({ message: "Signed in" });
 });
 
-// Authorization
-app.get("/auth/status", (req, res) => {
-  res.json({ loggedIn: true, username: "aaron" });
+
+
+// AUTHORIZE
+app.get("/authorize", (req, res) => {
+  const token = req.cookies.access_token;
+  if (!token) return res.json({ loggedIn: false });
+  try {
+    const payload = jwt.verify(token, SECRET);
+    return res.json({ loggedIn: true, username: payload.sub });
+  } catch (e) {
+    return res.json({ loggedIn: false });
+  }
 });
 
-// UPLOADS
+
+
+// UPLOAD
 const uploadDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 
