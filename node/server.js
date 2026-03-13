@@ -28,15 +28,16 @@ app.post("/signup", async(req, res) => {
   const { username, email, password_input } = req.body;
   
   // validate
-  if (!utils.isEightChars(username) || !(await utils.isNewUsername(username))) {
+  if (!utils.isEightAlphanumerics(username) || !(await utils.isNewUsername(username))) {
     return res.status(401).json({ message: "Invalid username" });
   }
   if (!utils.isEmail(email)) {
     return res.status(401).json({ message: "Invalid email" });
   }
-  if (!utils.isEightChars(password_input)) {
+  if (password_input.length < 8) {
     return res.status(401).json({ message: "Invalid password" });
   }
+
 
   // hash
   const hash = await bcrypt.hash(password_input, 10); // 10 salt rounds
@@ -70,10 +71,10 @@ app.post("/signin", async(req, res) => {
   const { username, password_input } = req.body;
   
   // validate
-  if (!utils.isEightChars(username) || !(await utils.isExistingUsername(username))) {
+  if (!utils.isEightAlphanumerics(username) || !(await utils.isExistingUsername(username))) {
     return res.status(401).json({ message: "Invalid username" });
   }
-  if (!utils.isEightChars(password_input)) {
+  if (password_input.length < 8) {
     return res.status(401).json({ message: "Invalid password" });
   }
 
@@ -141,7 +142,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Route to receive link + files
-app.post("/api/links", upload.fields([
+app.post("/upload", upload.fields([
   { name: "frontPhoto", maxCount: 1 },
   { name: "backPhoto", maxCount: 1 },
 ]), async (req, res) => {
@@ -159,11 +160,10 @@ app.post("/api/links", upload.fields([
     };
 
     // Send to FastAPI
-    const response = await axios.post("http://fastapi:8000/links", payload);
+    const response = await axios.post("http://fastapi:8000/upload", payload);
     res.json(response.data);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to save link" });
+    res.status(500).json({ error: "Failed to save link" + err });
   }
 });
 

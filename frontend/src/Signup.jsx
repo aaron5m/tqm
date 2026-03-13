@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import styles from "./index.module.css"
 
 export default function Signup() {
+  const navigate = useNavigate();
   const [user, setUser] = useState({ username: '', email: '', password_input: '' });
   const [emailInput, setEmailInput] = useState("");
   const [error, setError] = useState("");
@@ -15,7 +17,7 @@ export default function Signup() {
 
   const submit = async (e) => {
     e.preventDefault();
-    await fetch('http://localhost:3000/signup', {
+    const res = await fetch('http://localhost:3000/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -24,9 +26,11 @@ export default function Signup() {
         email: user.email,
         password_input: user.password_input
       })
-    })
-    .then(res => res.json())
-    .then(data => console.log(data));
+    });
+
+    if (res.ok) {
+      navigate("/dashboard"); // redirect
+    }
   };
 
   return (

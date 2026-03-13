@@ -6,15 +6,10 @@ import Signin from "./Signin";
 import Upload from "./Upload";
 import Items from "./Items";
 
+import { useAuth } from "./AuthContext";
 
 function App() {
-  const [compeer, setCompeer] = useState(null);
-  useEffect(() => {
-    fetch("http://localhost:3000/authorize", { credentials: "include" })
-      .then(res => res.json())
-      .then(data => setCompeer(data.loggedIn ? data.username : null));
-  }, []);
-
+  const compeer = useAuth();
   return (
     <BrowserRouter>
       <Routes>
@@ -27,6 +22,7 @@ function App() {
       </Routes>
     </BrowserRouter>
   )
+
 }
 
 export default App;

@@ -1,13 +1,13 @@
 /*
  * All return true or false
- * isEightChars
+ * isEightAlphanumerics
  * isNewUsername
  * isExistingUsername
  * isEmail
  * 
 */
 
-export function isEightChars(str) {
+export function isEightAlphanumerics(str) {
   return /^[A-Za-z0-9]{8,}$/.test(str);
 }
 

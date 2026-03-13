@@ -54,7 +54,7 @@ def create_user(user_data: Compeer):
         return {"status": "success", "username": user_data.username}
 
 # UPLOAD PROCESSING
-@app.post("/links")
+@app.post("/upload")
 def create_link(link_data: dict):
     """
     Expects JSON from Node.js like:

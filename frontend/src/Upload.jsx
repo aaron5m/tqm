@@ -29,7 +29,7 @@ export default function Upload() {
     if (formData.backPhoto) data.append("backPhoto", formData.backPhoto);
 
     try {
-      const res = await fetch("http://localhost:3000/api/links", {
+      const res = await fetch("http://localhost:3000/upload", {
         method: "POST",
         credentials: "include",
         body: data, // FormData automatically sets multipart/form-data
