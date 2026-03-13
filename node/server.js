@@ -129,6 +129,71 @@ app.get("/authorize", (req, res) => {
 
 
 // UPLOAD
+const uploadDir = "/app/uploads";
+const htmlDir = "/app/html_images";
+const viteDir = "/app/frontend_public_images";
+const usefulDirs = [uploadDir, htmlDir, viteDir];
+for (const tempDir of usefulDirs) {
+  if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir, { recursive: true });
+}
+const upload = multer({ storage: multer.memoryStorage() });
+
+// route
+app.post(
+  "/upload",
+  upload.fields([
+    { name: "front", maxCount: 1 },
+    { name: "back", maxCount: 1 },
+  ]),
+  async (req, res) => {
+    try {
+      const { username, url, description } = req.body;
+      // validate username, url, and description
+      if (!utils.isEightAlphanumerics(username) || !(await utils.isExistingUsername(username))) {
+        return res.status(401).json({ message: "Invalid username:" + username });
+      }
+      if (!url) return res.status(401).json({ error: "URL required" });
+      try { new URL(url); } catch { return res.status(401).json({ error: "Invalid URL" }); }
+      if (!description || typeof description !== "string") {
+        return res.status(401).json({ error: "Description required and must be text" });
+      }
+
+      // validate images
+      const processedFiles = {};
+      for (const fieldName of ["front", "back"]) {
+        const file = req.files[fieldName]?.[0];
+        if (!file) return res.status(401).json({ error: "Image required" });
+        const type = await fileTypeFromBuffer(file.buffer);
+        if (!type || !type.mime.startsWith("image/")) {
+          return res.status(400).json({ error: `${fieldName} is not a valid image` });
+        }
+        // generate filename and write to disk
+        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+        const filename = `${uniqueSuffix}-${file.originalname}`.replace(/\s+/g, "");
+        for (const tempDir of usefulDirs) {
+          fs.writeFileSync(path.join(tempDir, filename), file.buffer);
+        }
+        processedFiles[fieldName] = filename;
+      }
+
+      // handoff to fastapi
+      const payload = {
+        username,
+        url,
+        description,
+        photos: processedFiles,
+      };
+      const response = await axios.post("http://fastapi:8000/upload", payload);
+      res.json(response.data);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Failed to save link: " + err.message });
+    }
+  }
+);
+
+
+/*
 const uploadDir = "/app/html_images";
 const copyDir = "/app/frontend_public_images";
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
@@ -194,11 +259,10 @@ app.post(
     }
   }
 );
-
-
+*/
 
 /*
-const uploadDir = path.join(__dirname, "uploads");
+const uploadDir = "/app/uploads";
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 
 const storage = multer.diskStorage({

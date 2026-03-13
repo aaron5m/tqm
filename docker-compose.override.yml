@@ -4,7 +4,7 @@ services:
       - "3000:3000"
     # Mount source code for live development
     volumes:
-      - ./node:/app
+      #- ./node:/app
       # Keep node_modules inside the container so they are not overwritten
       - ./node/node_modules:/app/node_modules
 
