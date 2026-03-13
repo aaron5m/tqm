@@ -10,6 +10,7 @@ const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const SECRET = process.env.SECRET;
 const bcrypt = require("bcrypt");
+const { fileTypeFromBuffer } = require("file-type");
 
 const app = express();
 app.use(express.json());
@@ -130,6 +131,67 @@ app.get("/authorize", (req, res) => {
 // UPLOAD
 const uploadDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
+const upload = multer({ storage: multer.memoryStorage() });
+
+// route
+app.post(
+  "/upload",
+  upload.fields([
+    { name: "front", maxCount: 1 },
+    { name: "back", maxCount: 1 },
+  ]),
+  async (req, res) => {
+    try {
+      const { username, url, description } = req.body;
+
+      // validate username, url, and description
+      if (!utils.isEightAlphanumerics(username) || !(await utils.isExistingUsername(username))) {
+        return res.status(401).json({ message: "Invalid username" });
+      }
+      if (!url) return res.status(401).json({ error: "URL required" });
+      try { new URL(url); } catch { return res.status(401).json({ error: "Invalid URL" }); }
+      if (!description || typeof description !== "string") {
+        return res.status(401).json({ error: "Description required and must be text" });
+      }
+
+      // validate images
+      const processedFiles = {};
+      for (const fieldName of ["front", "back"]) {
+        const file = req.files[fieldName]?.[0];
+        if (!file) res.status(401).json({ error: "Image required" });
+        const type = await fileTypeFromBuffer(file.buffer);
+        if (!type || !type.mime.startsWith("image/")) {
+          return res.status(400).json({ error: `${fieldName} is not a valid image` });
+        }
+        // generate filename and write to disk
+        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+        const filename = `${uniqueSuffix}-${file.originalname}`.replace(/\s+/g, "");
+        const filepath = path.join(uploadDir, filename);
+        fs.writeFileSync(filepath, file.buffer);
+        processedFiles[fieldName] = filename;
+      }
+
+      // handoff to fastapi
+      const payload = {
+        username,
+        url,
+        description,
+        photos: processedFiles,
+      };
+      const response = await axios.post("http://fastapi:8000/upload", payload);
+      res.json(response.data);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Failed to save link: " + err.message });
+    }
+  }
+);
+
+
+
+/*
+const uploadDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadDir),
@@ -143,20 +205,20 @@ const upload = multer({ storage });
 
 // Route to receive link + files
 app.post("/upload", upload.fields([
-  { name: "frontPhoto", maxCount: 1 },
-  { name: "backPhoto", maxCount: 1 },
+  { name: "front", maxCount: 1 },
+  { name: "back", maxCount: 1 },
 ]), async (req, res) => {
   try {
-    const { url, description } = req.body;
-    const frontPhoto = req.files.frontPhoto?.[0]?.filename || null;
-    const backPhoto = req.files.backPhoto?.[0]?.filename || null;
+    const { username, url, description } = req.body;
+    const front = req.files.front?.[0]?.filename || null;
+    const back = req.files.back?.[0]?.filename || null;
 
     // Construct JSON payload for FastAPI
     const payload = {
-      username: "mockuser", // or get from session/auth
+      username,
       url,
       description,
-      photos: { front: frontPhoto, back: backPhoto },
+      photos: { front: front, back: back },
     };
 
     // Send to FastAPI
@@ -166,7 +228,7 @@ app.post("/upload", upload.fields([
     res.status(500).json({ error: "Failed to save link" + err });
   }
 });
-
+*/
 
 
 // Example route calling FastAPI

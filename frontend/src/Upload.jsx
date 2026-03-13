@@ -1,12 +1,17 @@
 import { useState } from "react";
 import "./App.css";
+import { useAuth } from "./AuthContext";
 
 export default function Upload() {
+  const compeer = useAuth();
+  if (!compeer) return;
+
   const [formData, setFormData] = useState({
+    username: compeer,
     url: "",
     description: "",
-    frontPhoto: null,
-    backPhoto: null,
+    front: null,
+    back: null,
   });
 
   const handleChange = (e) => {
@@ -23,10 +28,11 @@ export default function Upload() {
 
     // Use FormData to send files
     const data = new FormData();
+    data.append("username", formData.username);
     data.append("url", formData.url);
     data.append("description", formData.description);
-    if (formData.frontPhoto) data.append("frontPhoto", formData.frontPhoto);
-    if (formData.backPhoto) data.append("backPhoto", formData.backPhoto);
+    if (formData.front) data.append("front", formData.front);
+    if (formData.back) data.append("back", formData.back);
 
     try {
       const res = await fetch("http://localhost:3000/upload", {
@@ -35,9 +41,8 @@ export default function Upload() {
         body: data, // FormData automatically sets multipart/form-data
       });
       const result = await res.json();
-      console.log("Created link:", result);
-      alert("Link uploaded!");
-      setFormData({ url: "", description: "", frontPhoto: null, backPhoto: null });
+      console.log(result);
+      setFormData({ url: "", description: "", front: null, back: null });
     } catch (err) {
       console.error("Error submitting link:", err);
       alert("Error submitting link.");
@@ -71,7 +76,7 @@ export default function Upload() {
             <input
               className="input"
               type="file"
-              name="frontPhoto"
+              name="front"
               accept="image/*"
               onChange={handleChange}
             />
@@ -81,7 +86,7 @@ export default function Upload() {
             <input
               className="input"
               type="file"
-              name="backPhoto"
+              name="back"
               accept="image/*"
               onChange={handleChange}
             />

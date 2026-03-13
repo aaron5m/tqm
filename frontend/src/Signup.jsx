@@ -29,7 +29,7 @@ export default function Signup() {
     });
 
     if (res.ok) {
-      navigate("/dashboard"); // redirect
+      navigate("/"); // redirect
     }
   };
 

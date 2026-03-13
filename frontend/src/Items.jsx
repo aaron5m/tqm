@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ItemCard from "./ItemCard";
 
 function Items() {
   const [items, setItems] = useState([]);
@@ -12,13 +13,11 @@ function Items() {
   return (
     <div>
       <h2>Items</h2>
-      <ul>
-        {items.map((item, index) => (
-          <li key={index}>
-            {JSON.stringify(item)}
-          </li>
+      <div>
+        {items.map((item) => (
+          <ItemCard key={item.id} item={item} />
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

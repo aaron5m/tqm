@@ -26,6 +26,7 @@ export async function isExistingUsername(username) {
   try {
     const res = await fetch(`http://fastapi:8000/compeer?username=${username}`);
     const data = await res.json();
+    console.log("FastAPI response:", data);
     return data.exists === true; 
   } catch (err) {
     console.error("Error checking username:", err);
