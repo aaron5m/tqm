@@ -12,8 +12,7 @@ function Items() {
 
   return (
     <div>
-      <h2>Items</h2>
-      <div>
+      <div style={{ display: "flex", justifyContent: "center", gap: "16px", flexWrap: "wrap" }}>
         {items.map((item) => (
           <ItemCard key={item.id} item={item} />
         ))}

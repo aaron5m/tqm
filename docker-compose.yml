@@ -6,6 +6,7 @@ services:
     volumes:
       - vite_dist:/app/dist
       - ./html:/app/web_pages
+      - ./frontend/node_modules:/app/node_modules
     command: sh -c "npm run build && chmod -R 777 /app/dist"
 
   node:
@@ -16,10 +17,13 @@ services:
       FASTAPI_URL: http://fastapi:8000
     networks:
       - backend
+    ports:
+      - "127.0.0.1:3000:3000"
     volumes:
       - ./node:/app
       - ./html/images:/app/html_images
       - ./frontend/public/images:/app/frontend_public_images
+      - ./node/node_modules:/app/node_modules
     env_file:
       - .env
 
@@ -32,7 +36,6 @@ services:
       - ./html:/app/web_pages
       - ./html/images:/app/html_images
       - ./frontend/public/images:/app/frontend_public_images
-      # - ./html/images:/app/html_images
     command: sh -c "mkdir -p /app/web_pages; cp -Rpn /app/dist/* /app/web_pages/; cp -Rpn /app/frontend_public_images/* app/html_images/"
 
   fastapi:
@@ -48,6 +51,11 @@ services:
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
     networks:
       - backend
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - ./fastapi:/app
+      - fastapi_venv:/app/.venv
 
   postgres:
     image: postgres:15
@@ -69,6 +77,7 @@ services:
 volumes:
   vite_dist:
   postgres_data:
+  fastapi_venv:
 
 networks:
   backend:

@@ -46,7 +46,7 @@ export default function ItemCard({ item }) {
           rel="noopener noreferrer"
           style={{ color: "#007bff", textDecoration: "none" }}
         >
-          View Product
+          View Shirt Page
         </a>
       </div>
     </div>
