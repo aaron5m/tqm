@@ -53,7 +53,5 @@ Data builds models with **fastapi**, **postgres** stores under docker, fastapi t
                                          +-------------------+
                                          |     PostgreSQL    |
                                          |      Database     |
-                                         |    Not directly   |
-                                         |  internet exposed |
                                          +-------------------+
 ```
