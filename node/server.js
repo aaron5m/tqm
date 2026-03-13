@@ -129,10 +129,9 @@ app.get("/authorize", (req, res) => {
 
 
 // UPLOAD
-const uploadDir = "/app/uploads";
 const htmlDir = "/app/html_images";
 const viteDir = "/app/frontend_public_images";
-const usefulDirs = [uploadDir, htmlDir, viteDir];
+const usefulDirs = [htmlDir, viteDir];
 for (const tempDir of usefulDirs) {
   if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir, { recursive: true });
 }

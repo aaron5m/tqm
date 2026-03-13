@@ -2,10 +2,11 @@ services:
   frontend:
     build: ./frontend
     depends_on:
-     - node
+      - node
     volumes:
-     - vite_dist:/app/dist
-    command: sh -c "npm run build -- --publicDir false" # build just the web app
+      - vite_dist:/app/dist
+      - ./html:/app/web_pages
+    command: sh -c "npm run build && chmod -R 777 /app/dist"
 
   node:
     build: ./node
@@ -17,34 +18,20 @@ services:
       - backend
     volumes:
       - ./node:/app
-      - uploads:/app/uploads
       - ./html/images:/app/html_images
       - ./frontend/public/images:/app/frontend_public_images
     env_file:
       - .env
 
-#  sync:
-#    image: alpine
-#    volumes:
-#      - vite_dist:/app/dist
-#      - uploads:/app/uploads
-#      - ./html:/app/web_pages
-#      - ./html/images:/app/html_images
-#      - ./frontend/public/images:/app/frontend_public_images
-#    command: sh -c "while true; do cp -r /app/uploads/* /app/html_images/; cp -r /app/uploads/* /app/frontend_public_images/; sleep 5; done"
-
   sync:
     image: alpine
+    depends_on:
+      - frontend
     volumes:
       - vite_dist:/app/dist
-      - uploads:/app/uploads
       - ./html:/app/web_pages
-      #- ./html/images:/app/html_images
-      #- ./frontend/public/images:/app/frontend_public_images
-    command: sh -c "
-      mkdir -p /app/web_pages;
-      cp -r /app/dist/* /app/web_pages;
-      "
+      # - ./html/images:/app/html_images
+    command: sh -c "mkdir -p /app/web_pages;cp -Rpn /app/dist/* /app/web_pages/"
 
   fastapi:
     build: ./fastapi
@@ -78,7 +65,6 @@ services:
       - backend
 
 volumes:
-  uploads:
   vite_dist:
   postgres_data:
 

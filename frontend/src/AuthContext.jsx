@@ -7,10 +7,10 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     async function checkAuth() {
-      await fetch("http://localhost:3000/authorize", { credentials: "include" })
+      fetch("http://localhost:3000/authorize", { credentials: "include" })
       .then(res => res.json())
       .then(data => setCompeer(data.loggedIn ? data.username : null))
-      .then(setLoading(false));
+      .then(() => setLoading(false));
     }
     checkAuth();
   }, []);
