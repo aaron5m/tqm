@@ -30,8 +30,10 @@ services:
     volumes:
       - vite_dist:/app/dist
       - ./html:/app/web_pages
+      - ./html/images:/app/html_images
+      - ./frontend/public/images:/app/frontend_public_images
       # - ./html/images:/app/html_images
-    command: sh -c "mkdir -p /app/web_pages;cp -Rpn /app/dist/* /app/web_pages/"
+    command: sh -c "mkdir -p /app/web_pages; cp -Rpn /app/dist/* /app/web_pages/; cp -Rpn /app/frontend_public_images/* app/html_images/"
 
   fastapi:
     build: ./fastapi
