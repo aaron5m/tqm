@@ -16,7 +16,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: lightskyblue;
+  background-color: #E5EAF5;
 }
 
 .card {
@@ -43,7 +43,7 @@ body {
 
 .button {
   padding: 0.8rem;
-  background-color: #007bff;
+  background-color: navy;
   color: white;
   border: none;
   border-radius: 4px;
@@ -58,3 +58,4 @@ body {
 .centrify {
     text-align: center;
 }
+

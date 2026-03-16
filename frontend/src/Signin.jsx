@@ -1,12 +1,21 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useAuth } from "./AuthContext";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import styles from "./index.module.css"
 
 export default function Signin() {
+  const { compeer, checkAuth } = useAuth();
+  const location = useLocation();
   const navigate = useNavigate();
   const [user, setUser] = useState({ username: '', email: '', password_input: '' });
-  const [emailInput, setEmailInput] = useState("");
-  const [error, setError] = useState("");
+
+  const from = location.state?.from || "/"; // default to home
+  useEffect(() => {
+    if (compeer) {
+      navigate(from, { replace: true }); // redirect if already signed in
+    }
+  }, [compeer, navigate, from]);
 
   const submit = async (e) => {
     e.preventDefault();
@@ -20,17 +29,16 @@ export default function Signin() {
         password_input: user.password_input
       })
     });
-
     if (res.ok) {
-      window.location.href = "/upload";
-      // navigate("/"); // refresh
+      await checkAuth();
+      navigate(from);
     }
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-      <h1 className={styles.centrify}>The American<br></br>Quarter Millennium</h1>
+      <h1 className={styles.centrify}>The Quarter <br></br> Millennium</h1>
         <form className={styles.form} onSubmit={submit}>
           <input 
             className={styles.input}

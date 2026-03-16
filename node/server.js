@@ -16,6 +16,8 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
+// HELPERS AT BOTTOM
+
 // Allow local only cors
 app.use(cors({
   origin: ["http://localhost:5173", "http://localhost:5174", "http://localhost:8080"],
@@ -38,7 +40,6 @@ app.post("/signup", async(req, res) => {
   if (password_input.length < 8) {
     return res.status(401).json({ message: "Invalid password" });
   }
-
 
   // hash
   const hash = await bcrypt.hash(password_input, 10); // 10 salt rounds
@@ -104,8 +105,8 @@ app.post("/signin", async(req, res) => {
 
   res.cookie("access_token", token, {
     httpOnly: true,
-    secure: false,   // true if HTTPS
-    sameSite: "lax",
+    secure: false, // only localhost talks to node
+    sameSite: "lax",  // but localhost is outside container
     maxAge: 3600 * 1000 * 24 * 7
   });
 
@@ -114,8 +115,21 @@ app.post("/signin", async(req, res) => {
 
 
 
+// SIGNOUT
+app.post("/signout", (req, res) => {
+  res.clearCookie("access_token", {
+    httpOnly: true,
+    secure: false,      
+    sameSite: "lax",
+  });
+
+  res.status(200).json({ message: "Signed out" });
+});
+
+
+
 // AUTHORIZE
-app.get("/authorize", (req, res) => {
+app.post("/authorize", (req, res) => {
   const token = req.cookies.access_token;
   if (!token) return res.json({ loggedIn: false });
   try {
@@ -211,3 +225,5 @@ app.get("/api/test", (req, res) => {
 app.listen(3000, "0.0.0.0", () => {
   console.log("Node API running on port 3000");
 });
+
+

@@ -1,10 +1,19 @@
-import { useState } from "react";
-import "./App.css";
+import { useEffect, useState } from "react";
 import { useAuth } from "./AuthContext";
+import { useLocation, useNavigate } from "react-router-dom";
+import "./App.css";
 
 export default function Upload() {
-  const compeer = useAuth();
-  if (!compeer) return;
+  const { compeer } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!compeer) {
+      navigate("/signin", { state: { from: location.pathname } });
+    }
+  }, [compeer, navigate]);
+
 
   const [formData, setFormData] = useState({
     username: compeer,
@@ -43,6 +52,7 @@ export default function Upload() {
       const result = await res.json();
       console.log(result);
       setFormData({ url: "", description: "", front: null, back: null });
+      if (res.ok) window.location.reload();
     } catch (err) {
       console.error("Error submitting link:", err);
       alert("Error submitting link.");
