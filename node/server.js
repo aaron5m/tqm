@@ -18,7 +18,11 @@ app.use(cookieParser());
 
 // Allow local only cors
 app.use(cors({
-  origin: ["http://localhost:5173", "http://localhost:5174", "http://localhost:8080"],
+  origin: ["http://localhost:5173", 
+    "http://localhost:5174", 
+    "http://localhost:8080", 
+    "http://localhost:80",
+    "http://localhost:443"],
   credentials: true,
 }));
 
