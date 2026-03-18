@@ -54,7 +54,7 @@ export default function Upload() {
       const result = await res.json();
       console.log(result);
       setFormData({ url: "", title:"", description: "", front: null, back: null });
-      if (res.ok) window.location.reload();
+      if (res.ok) navigate("/");
     } catch (err) {
       console.error("Error submitting link:", err);
       alert("Error submitting link.");

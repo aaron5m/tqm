@@ -28,7 +28,7 @@ export default function Profile() {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-      <h1 className={styles.centrify}>The<br></br>Quarter Millennium</h1>
+      <h1 className={styles.centrify}>The Quarter<br></br>Millennium</h1>
         <form className={styles.form} onSubmit={submit}>
           <div>{compeer}</div>
           <button className={styles.button} type="submit">Sign Out</button>

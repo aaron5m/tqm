@@ -7,50 +7,53 @@ function formatDate(timestamp) {
 
 export default function ItemCard({ item }) {
   return (
-    <div style={{
-      border: "1px solid #ddd",
-      borderRadius: "8px",
-      padding: "16px",
-      marginBottom: "16px",
-      maxWidth: "500px",
-      boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-      fontFamily: "sans-serif",
-    }}>
-      <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
-        {item.photos.front && (
-          <img
-            src={`./images/${item.photos.front}`}
-            alt="Front"
-            style={{ width: "48%", borderRadius: "4px", objectFit: "cover" }}
-          />
-        )}
-        {item.photos.back && (
-          <img
-            src={`./images/${item.photos.back}`}
-            alt="Back"
-            style={{ width: "48%", borderRadius: "4px", objectFit: "cover" }}
-          />
-        )}
-      </div>
-      <div style={{ marginBottom: "5px" }}>
-        <strong>{item.title}</strong>
-      </div>
-      <div style={{ marginBottom: "8px" }}>      
-        {item.description}
-      </div>
-      <div style={{ fontSize: "0.9em", color: "#555", marginBottom: "8px" }}>
-        Posted by {item.username} on {formatDate(item.timestamp)}
-      </div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <span style={{ cursor: "pointer"}}>👍 {item.upvotes}</span>
-        <a
-          href={item.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: "#007bff", textDecoration: "none" }}
-        >
-          View Page
-        </a>
+    <div style={{ display: "block", textAlign: "center"}}>
+      <div style={{
+        border: "1px solid #ddd",
+        borderRadius: "8px",
+        padding: "16px",
+        marginBottom: "16px",
+        maxWidth: "500px",
+        boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+        fontFamily: "sans-serif",
+        display: "inline-block",
+      }}>
+        <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
+          {item.photos.front && (
+            <img
+              src={`./images/${item.photos.front}`}
+              alt="Front"
+              style={{ width: "48%", borderRadius: "4px", objectFit: "cover" }}
+            />
+          )}
+          {item.photos.back && (
+            <img
+              src={`./images/${item.photos.back}`}
+              alt="Back"
+              style={{ width: "48%", borderRadius: "4px", objectFit: "cover" }}
+            />
+          )}
+        </div>
+        <div style={{ marginBottom: "5px" }}>
+          <strong>{item.title}</strong>
+        </div>
+        <div style={{ marginBottom: "8px" }}>      
+          {item.description}
+        </div>
+        <div style={{ fontSize: "0.9em", color: "#555", marginBottom: "8px" }}>
+          Posted by {item.username} on {formatDate(item.timestamp)}
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span style={{ cursor: "pointer"}}>👍 {item.upvotes}</span>
+          <a
+            href={item.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "#007bff", textDecoration: "none" }}
+          >
+            View Page
+          </a>
+        </div>
       </div>
     </div>
   );

@@ -90,7 +90,7 @@ export default function Signup() {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-      <h1 className={styles.centrify}>The<br></br>Quarter Millennium</h1>
+      <h1 className={styles.centrify}>The Quarter<br></br>Millennium</h1>
         <form className={styles.form} onSubmit={submit}>
           <input 
             className={styles.input}

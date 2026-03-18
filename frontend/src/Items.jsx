@@ -17,9 +17,9 @@ function Items() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "center", gap: "16px", flexWrap: "wrap" }}>
+      <div style={{ textAlign: "center", margin: "2vh" }}>
         {items.map((item) => (
-          <ItemCard key={item.id} item={item} />
+            <ItemCard key={item.id} item={item} />
         ))}
       </div>
     </div>
