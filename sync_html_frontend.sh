@@ -12,7 +12,6 @@ for f in /app/dist/*; do
   base=$(basename "$f")
   if [ "$base" != "images" ]; then
     cp -R "$f" /app/web_pages/
-    echo "Copied: $f"
   fi
 done
 
