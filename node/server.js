@@ -17,7 +17,7 @@ const axios = require("axios");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
-const SECRET = process.env.SECRET;
+const JWT_SECRET = process.env.JWT_SECRET;
 const bcrypt = require("bcrypt");
 const { fileTypeFromBuffer } = require("file-type");
 
@@ -26,13 +26,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 const FASTAPI_URL = process.env.FASTAPI_URL;
-const API_SECRET = ((str) => {
-  let h = 5381;
-  for (let i = 0; i < str.length; i++) {
-    h = (h * 33) ^ str.charCodeAt(i);
-  }
-  return (h >>> 0).toString(16);
-})(SECRET);
+const API_SECRET = process.env.API_SECRET;
 
 // Allow local only cors for React/Vite development
 app.use(cors({
@@ -126,7 +120,7 @@ app.post("/api/signin", async(req, res) => {
 
   const token = jwt.sign(
     { sub: username, exp: Math.floor(Date.now() / 1000) + 3600 * 24 * 7 }, // 1 week
-    SECRET
+    JWT_SECRET
   );
 
   res.cookie("access_token", token, {
@@ -159,7 +153,7 @@ app.post("/api/authorize", (req, res) => {
   const token = req.cookies.access_token;
   if (!token) return res.json({ loggedIn: false });
   try {
-    const payload = jwt.verify(token, SECRET);
+    const payload = jwt.verify(token, JWT_SECRET);
     return res.json({ loggedIn: true, username: payload.sub });
   } catch (e) {
     return res.json({ loggedIn: false });
@@ -186,15 +180,15 @@ app.post(
   ]),
   async (req, res) => {
     try {
-      const { username, url, description } = req.body;
+      const { username, url, title, description } = req.body;
       // validate username, url, and description
       if (!utils.isEightAlphanumerics(username) || !(await utils.isExistingUsername(username))) {
         return res.status(401).json({ message: "Invalid username:" + username });
       }
       if (!url) return res.status(401).json({ error: "URL required" });
       try { new URL(url); } catch { return res.status(401).json({ error: "Invalid URL" }); }
-      if (!description || typeof description !== "string") {
-        return res.status(401).json({ error: "Description required and must be text" });
+      if (typeof title !== "string" || typeof description !== "string") {
+        return res.status(401).json({ error: "Title and Description must be text" });
       }
 
       // validate images
@@ -220,6 +214,7 @@ app.post(
         {
           username,
           url,
+          title,
           description,
           photos: processedFiles
         }, 

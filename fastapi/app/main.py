@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Request
 from sqlmodel import Session, select
 from sqlalchemy import text
 from .auth import hash_password
@@ -6,12 +6,13 @@ from .models import Link, Compeer # SQLModel class
 from .db import engine
 from .utils import *
 from fastapi.middleware.cors import CORSMiddleware
+import os
 
 app = FastAPI()
 
+API_SECRET = os.getenv("API_SECRET")
 
-
-# MIDDLEWARE FOR LOCALHOST
+# MIDDLEWARE FOR REACT/VITE DEVELOPMENT
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", 
@@ -26,12 +27,51 @@ app.add_middleware(
 
 
 
+# SIGNUP PROCESSING *Note *requires API_SECRET
+@app.post("/pyapi/signup")
+def create_user(user_data: Compeer, request: Request):
+    token = request.headers.get("X-API-KEY")
+    if token != API_SECRET:
+        raise HTTPException(status_code=403, detail="Forbidden")
+    try:
+        with Session(engine) as session:
+            session.add(user_data)
+            session.commit()
+            session.refresh(user_data)
+        return {"status": "success", "username": user_data.username}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Database error")
+
+
+
+# UPLOAD PROCESSING *Note *requires API_SECRET
+@app.post("/pyapi/upload")
+def create_link(link_data: Link, request: Request):
+    token = request.headers.get("X-API-KEY")
+    if token != API_SECRET:
+        raise HTTPException(status_code=403, detail="Forbidden")
+    try:
+        with Session(engine) as session:
+            session.add(link_data)
+            session.commit()
+            session.refresh(link_data)
+        return {"id": link_data.id, "status": "created"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
 # CHECK FOR A USERNAME
 @app.get("/pyapi/compeer")
 def compeer(username: str = Query(...)):
     exists = check_username(username)
     return {"exists": exists}
-
+# actual function check_username returns true if username exists
+def check_username(username: str) -> bool:
+    with Session(engine) as session:
+        statement = select(Compeer).where(Compeer.username == username)
+        result = session.exec(statement).first()
+        return result is not None
 
 
 # GET PASSWORD HASH FOR A USERNAME
@@ -43,50 +83,6 @@ def get_hash(username: str = Query(...)):
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
         return {"hash": user.password_input}
-
-
-
-# SIGNUP PROCESSING
-@app.post("/pyapi/signup")
-def create_user(user_data: Compeer):
-    with Session(engine) as session:
-        # 1. Overwrite the input with the hash
-        # user_data.password_input = hash_password(user_data.password_input)
-        
-        # 2. Save to Postgres
-        session.add(user_data)
-        session.commit()
-        session.refresh(user_data)
-        return {"status": "success", "username": user_data.username}
-
-
-
-# UPLOAD PROCESSING
-@app.post("/pyapi/upload")
-def create_link(link_data: dict):
-    """
-    Expects JSON from Node.js like:
-    {
-        "username": "mockuser",
-        "url": "...",
-        "description": "...",
-        "photos": {"front": "front.jpg", "back": "back.jpg"}
-    }
-    """
-    try:
-        link = Link(
-            username=link_data["username"],
-            url=link_data["url"],
-            description=link_data.get("description"),
-            photos=link_data.get("photos", {}),
-        )
-        with Session(engine) as session:
-            session.add(link)
-            session.commit()
-            session.refresh(link)
-        return {"id": link.id, "status": "created"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
 
 
 

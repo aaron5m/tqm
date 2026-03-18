@@ -32,21 +32,24 @@ export default function ItemCard({ item }) {
           />
         )}
       </div>
-      <div style={{ marginBottom: "8px" }}>
-        <strong>{item.description}</strong>
+      <div style={{ marginBottom: "5px" }}>
+        <strong>{item.title}</strong>
+      </div>
+      <div style={{ marginBottom: "8px" }}>      
+        {item.description}
       </div>
       <div style={{ fontSize: "0.9em", color: "#555", marginBottom: "8px" }}>
         Posted by {item.username} on {formatDate(item.timestamp)}
       </div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <span>👍 {item.upvotes}</span>
+        <span style={{ cursor: "pointer"}}>👍 {item.upvotes}</span>
         <a
           href={item.url}
           target="_blank"
           rel="noopener noreferrer"
           style={{ color: "#007bff", textDecoration: "none" }}
         >
-          View Shirt Page
+          View Page
         </a>
       </div>
     </div>

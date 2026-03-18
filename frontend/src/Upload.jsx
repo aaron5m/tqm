@@ -18,6 +18,7 @@ export default function Upload() {
   const [formData, setFormData] = useState({
     username: compeer,
     url: "",
+    title: "",
     description: "",
     front: null,
     back: null,
@@ -39,6 +40,7 @@ export default function Upload() {
     const data = new FormData();
     data.append("username", formData.username);
     data.append("url", formData.url);
+    data.append("title", formData.title);
     data.append("description", formData.description);
     if (formData.front) data.append("front", formData.front);
     if (formData.back) data.append("back", formData.back);
@@ -51,7 +53,7 @@ export default function Upload() {
       });
       const result = await res.json();
       console.log(result);
-      setFormData({ url: "", description: "", front: null, back: null });
+      setFormData({ url: "", title:"", description: "", front: null, back: null });
       if (res.ok) window.location.reload();
     } catch (err) {
       console.error("Error submitting link:", err);
@@ -62,7 +64,6 @@ export default function Upload() {
   return (
     <div className="container">
       <div className="card">
-        <h2 className="centrify">Link To Your Shirt</h2>
         <form className="form" onSubmit={handleSubmit}>
           <input
             className="input"
@@ -76,13 +77,21 @@ export default function Upload() {
           <input
             className="input"
             type="text"
+            name="title"
+            placeholder="Title"
+            value={formData.title}
+            onChange={handleChange}
+          />
+          <textarea
+            className="input"
+            rows={3}
             name="description"
             placeholder="Description"
             value={formData.description}
             onChange={handleChange}
           />
           <div>
-            <label className="centrify">Front</label>
+            <label>Front </label>
             <input
               className="input"
               type="file"
@@ -92,7 +101,7 @@ export default function Upload() {
             />
           </div>
           <div>
-            <label className="centrify">Back</label>
+            <label>Back </label>
             <input
               className="input"
               type="file"

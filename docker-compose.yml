@@ -22,8 +22,9 @@ services:
     depends_on:
       - fastapi
     environment:
-      FASTAPI_URL: http://fastapi:8000
-      SECRET: ${SECRET}
+      - FASTAPI_URL=http://fastapi:8000
+      - JWT_SECRET=${JWT_SECRET}
+      - API_SECRET=${API_SECRET}
     networks:
       - backend
     ports:
@@ -70,6 +71,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      - API_SECRET=${API_SECRET}
     networks:
       - backend
     ports:
