@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "./AuthContext";
-import ItemCard from "./ItemCard";
+import { useAuth } from "../AuthContext";
+import ItemCard from "./vnfm_ItemCard";
+import styles from "./_vnfm.module.css";
 
 function Items() {
   const { fastapiUrl } = useAuth();
@@ -17,7 +18,7 @@ function Items() {
 
   return (
     <div>
-      <div style={{ textAlign: "center", margin: "2vh" }}>
+      <div className={styles.centrify}>
         {items.map((item) => (
             <ItemCard key={item.id} item={item} />
         ))}

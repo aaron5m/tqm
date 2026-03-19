@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
-import "./App.css";
+import styles from "./_vnfm.module.css";
 
 export default function Upload() {
   const { compeer, nodeUrl } = useAuth();
@@ -62,11 +62,11 @@ export default function Upload() {
   };
 
   return (
-    <div className="container">
-      <div className="card">
-        <form className="form" onSubmit={handleSubmit}>
+    <div className={styles.container}>
+      <div className={styles.card}>
+        <form className={styles.form} onSubmit={handleSubmit}>
           <input
-            className="input"
+            className={styles.input}
             type="text"
             name="url"
             placeholder="URL"
@@ -75,7 +75,7 @@ export default function Upload() {
             required
           />
           <input
-            className="input"
+            className={styles.input}
             type="text"
             name="title"
             placeholder="Title"
@@ -83,7 +83,7 @@ export default function Upload() {
             onChange={handleChange}
           />
           <textarea
-            className="input"
+            className={styles.input}
             rows={3}
             name="description"
             placeholder="Description"
@@ -91,9 +91,9 @@ export default function Upload() {
             onChange={handleChange}
           />
           <div>
-            <label>Front </label>
+            <label>Front Pic ( less than 1mb, please ) </label><br></br>
             <input
-              className="input"
+              className={styles.input}
               type="file"
               name="front"
               accept="image/*"
@@ -101,16 +101,16 @@ export default function Upload() {
             />
           </div>
           <div>
-            <label>Back </label>
+            <label>Back Pic ( less than 1mb, please ) </label><br></br>
             <input
-              className="input"
+              className={styles.input}
               type="file"
               name="back"
               accept="image/*"
               onChange={handleChange}
             />
           </div>
-          <button type="submit" className="button">
+          <button type="submit" className={styles.button}>
             Upload
           </button>
         </form>

@@ -1,0 +1,34 @@
+/* Navbar.module.css */
+
+.navbar {
+  width: 100%;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  background-color: navy;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+
+.team {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.littleBlock {
+  display: flex;
+  align-items: center;
+}
+
+.username {
+  margin-right: 0.5rem;
+  cursor: pointer;
+}
+
+.button {
+  padding: 0.5rem;
+  margin: 0.5rem 0.5rem 0.5rem 0;
+  cursor: pointer;
+}

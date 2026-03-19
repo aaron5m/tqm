@@ -1,19 +1,17 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import { useState, useEffect } from 'react';
-import Signup from "./Signup";
-import Signin from "./Signin";
-import Upload from "./Upload";
-import Items from "./Items";
-import NavBar from "./NavBar";
-import Profile from "./Profile";
+import Profile from "./vnfm/_vnfm_Profile";
+import Signup from "./vnfm/_vnfm_Signup";
+import Signin from "./vnfm/_vnfm_Signin";
+import Upload from "./vnfm/_vnfm_Upload";
+import Items from "./vnfm/_vnfm_Items";
+import Navbar from "./vnfm/vnfm_Navbar";
 
 import { useAuth } from "./AuthContext";
 
 function App() {
-  const { compeer } = useAuth();
   return (
     <BrowserRouter>
-      <NavBar />
+      <Navbar />
       <Routes>
         <Route path="/" element={<Items />} />
         <Route path="/signin" element={<Signin />} />

@@ -1,8 +1,9 @@
 import { useEffect } from "react";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from 'react';
-import styles from "./index.module.css"
+import styles from "./_vnfm.module.css";
+import * as global from "../constants/globals.js";
 
 export default function Signin() {
   const { compeer, checkAuth, nodeUrl } = useAuth();
@@ -38,7 +39,7 @@ export default function Signin() {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-      <h1 className={styles.centrify}>The Quarter <br></br> Millennium</h1>
+      <h1 className={styles.centrify}>{global.TEAM_NAME}</h1>
         <form className={styles.form} onSubmit={submit}>
           <input 
             className={styles.input}
