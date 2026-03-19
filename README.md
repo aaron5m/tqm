@@ -55,7 +55,7 @@ This project builds with **docker** a lightweight mirror of subnets in a cloud V
 
 This repository includes a **fully functional onboarding suite** to give your team something to build on quickly:
 
-- **User Signup / Signin**: Lightweight example with manual verification via `admin.js`.
+- **User Signup/Signin/Signout**: Lightweight example with manual verification via `admin.js`.
 - **Upload Links**: Users can submit:
   - Title
   - URL
@@ -72,7 +72,7 @@ This repository includes a **fully functional onboarding suite** to give your te
 - **Public Release (e.g. Nginx)**: Serves static frontend builds from the `html/` folder. Acts as the public-facing entry point.  
 - **Public Beta (React/Vite)**: Supports live frontend development with hot module reload. Can run inside or outside Docker; depends on Node backend for database interactions.  
 - **Private Subnet (Node.js)**: The gateway for all database-altering requests. Enforces internal API separation and business logic rules.  
-- **Semi-Isolated Subnet (FastAPI)**: Provides read-only access to the database for nginx queries; all writes must go through Node.js.  
+- **Semi-Isolated Subnet (FastAPI)**: Provides read-only access to the database for server-proxied-localhost queries; all writes must go through Node.js.  
 - **Isolated Data Subnet (Postgres)**: Fully isolated database layer, persistent via mounted volumes, accessible only through FastAPI models.
 
 This separation enables small teams to experiment with **role-based responsibilities** and **subnet isolation**, simulating for development a spirit like that of Alpine mountaineering teammates - responsive, agile, coordinated, competent.
@@ -84,7 +84,7 @@ This separation enables small teams to experiment with **role-based responsibili
 ```
 | Subnet / Layer       | Role / Responsibility        | Technology Stack   | Notes                        |
 |----------------------|------------------------------|--------------------|------------------------------|
-| Public Release       | Site Reliability Developer   | Nginx, HTML        | Serves static to external    |
+| Public Release       | Site Reliability Developer   | Nginx (or similar) | Serves static to external    |
 | Public Beta          | Frontend Developer           | React, Vite        | Hot reload, live development |
 | Private Subnet       | Backend Developer            | Node.js, FastAPI   | Internal API connections     |
 | Isolated Subnet      | Data Developer               | Postgres, SQLModel | Persistent, model-driven     |
@@ -95,16 +95,16 @@ This separation enables small teams to experiment with **role-based responsibili
 ## Development-Roles Workflow
 
 1. **Site Reliability Development**  
-   - Nginx serves the production-ready frontend.  
+   - Nginx (or similar) serves the production-ready frontend.  
    - Node.js and FastAPI remain accessible only through localhost, preserving internal isolation.
-   - Write the proxy-passes in nginx.conf for
+   - Write the proxy-passes (for example in nginx.conf) for
      - node (/api/ 127.0.0.1/api/)
      - FastAPI (/pyapi/ 127.0.0.1/pyapi).
 
 2. **Frontend Development**  
    - Run `npm run dev` inside the frontend directory.  
    - Iterate on React/Vite with hot reload.  
-   - When ready, run a full Docker rebuild to generate the static HTML build for Nginx.
+   - When ready, run a full Docker rebuild to generate the static HTML build for server.
 
 3. **Backend Development**  
    - Node.js handles business logic, writes to FastAPI, and enforces internal API rules.  
@@ -126,7 +126,11 @@ This separation enables small teams to experiment with **role-based responsibili
 ```
 ## Spin-up A Small Team
 
-Use vnFM as a sandbox challenge for a new team to quickly flesh out:
+1. SRE forks this repo and mocks up localhost .env for team (e.g. email)
+2. Frontend, Backend, and Data use docker and git pull/push/merge to coordinate local build, while
+3. SRE readies server with proxy rules, listeners, verification methods, and live .env
+
+**vnFM serves as a sandbox challenge for a new team to quickly flesh out**:
 
 - **Architectural awareness:** Emulates public, private, and isolated subnet strategies.  
 - **Team role clarity:** Frontend, backend, architecture, and data responsibilities are clear yet integrated.  
@@ -194,7 +198,7 @@ docker compose exec fastapi alembic upgrade head
 6. Make sure your server is up, for example
 `systemctl reload nginx`
 
-7. You may develop the frontend live with React/Vite.
+7. You may develop the frontend from the local machine with
 ```
 cd frontend
 npm install

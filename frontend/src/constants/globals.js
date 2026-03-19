@@ -1,1 +1,1 @@
-export const TEAM_NAME = "VNFM";
+export const TEAM_NAME = "vnFM";
