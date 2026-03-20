@@ -149,7 +149,7 @@ This separation enables small teams to experiment with **role-based responsibili
 or into the parent of your server's `html` folder, for example
 ```
 git clone https://github.com/aaron5m/vnfm
-cp vnfm/* /var/www/
+cp vnfm/. /var/www/
 ```
 
 2. Cd in and rename the .env.template file to .env, for example
