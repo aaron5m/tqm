@@ -160,12 +160,12 @@ mv .env.template .env
 
 3. Modify the variables without initial values (here marked *) in .env to (random) strings
 ```
-POSTGRES_USER=x*
-POSTGRES_PASSWORD=y*
-POSTGRES_DB=z*
-JWT_SECRET=*
+POSTGRES_USER=vnFMuser*
+POSTGRES_PASSWORD=vnFMpassword*
+POSTGRES_DB=vnFMdb*
+JWT_SECRET=vnFMjwt*
 VITE_PASS_URL=""
-API_SECRET=*
+API_SECRET=vnFMapi*
 VERIFICATION_REQUIRED=0
 ```
  - VITE_PASS_URL=https://your.domain if you are going into production
