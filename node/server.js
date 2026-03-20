@@ -31,7 +31,7 @@ const API_SECRET = process.env.API_SECRET;
 const JWT_SECRET = process.env.JWT_SECRET;
 const VERIFICATION_REQUIRED = Number(process.env.VERIFICATION_REQUIRED); // 0 means not required
 
-// Allow local only cors for React/Vite development
+// Allow local only cors for nginx and React/Vite development
 app.use(cors({
   origin: ["http://localhost:5173", 
     "http://localhost:5174", 

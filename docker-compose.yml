@@ -96,6 +96,8 @@ services:
     depends_on:
       - node
       - fastapi
+    networks:
+      - backend
     profiles:
       - http-only-nginx
  

@@ -1,6 +1,6 @@
 # vnFM Alpine VPC in a Box
 
-**A slim VPC environment for small role-based teams, designed to test cohesion, workflow, and architectural thinking before heading into full-scale production.**  
+**A slim VPC environment for small role-based teams, designed to improve cohesion, workflow, and architectural thinking before heading into full-scale production.**  
 
 This project builds with **docker** a lightweight mirror of subnets in a cloud VPC — public, private, and isolated — while providing a fast and flexible development workflow for frontend, backend, architecture, and data roles.
 
