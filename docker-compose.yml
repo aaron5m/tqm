@@ -25,6 +25,7 @@ services:
       - FASTAPI_URL=http://fastapi:8000
       - JWT_SECRET=${JWT_SECRET}
       - API_SECRET=${API_SECRET}
+      - VITE_PASS_URL=${VITE_PASS_URL}
     networks:
       - backend
     ports:
