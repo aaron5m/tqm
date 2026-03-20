@@ -160,9 +160,9 @@ mv .env.template .env
 
 3. Modify the variables without initial values (here marked *) in .env to (random) strings
 ```
-POSTGRES_USER=*
-POSTGRES_PASSWORD=*
-POSTGRES_DB=*
+POSTGRES_USER=x*
+POSTGRES_PASSWORD=y*
+POSTGRES_DB=z*
 JWT_SECRET=*
 VITE_PASS_URL=""
 API_SECRET=*
@@ -223,7 +223,7 @@ docker compose exec fastapi alembic upgrade head
 10. Make sure your server is up, for example
 `systemctl reload nginx`
 
-11. In PRODUCTION you may also develop beta with Vite
+11. In PRODUCTION you may also develop beta with Vite, but it is always http (unsafe)
 ```
 cd frontend
 npm install
@@ -238,6 +238,17 @@ VITE_PASS_URL=https://your.domain npm run dev
 - Automate `.env` generation for API secrets, database credentials, and public IP.  
 - Extend admin tooling for toggling environment flags (e.g., `VERIFICATION_REQUIRED`).  
 - Optional: Terraform or cloud deployment scripts for full Alpine VPC emulation.
+
+---
+
+## Known Issues
+
+Sometimes the nginx in http-only-nginx UNSAFE mode, does not want to stop.  
+Try `docker-compose exec nginx nginx -s stop` and wait a breath, then `docker-compose down`.
+
+Sometimes previous builds will interfere with a re-build of fastapi and its SQLmodels. If rebuilding, best to clear everything out from the before, with tools such as `docker system prune` etc.
+
+When switching modes between SANDBOX, UNSAFE, and PRODUCTION docker will sometimes keep the old values of the .env file, even after you've updated it. First re-build with no cache. Then use `--build` as you go up. Reload your server.
 
 ---
 
