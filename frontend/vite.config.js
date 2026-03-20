@@ -22,7 +22,7 @@ let config = {
   }
 };
 
-if (vitePassUrl) {
+if (process.env.VITE_PASS_URL) {
   config.server = {
     host: '0.0.0.0',
     port: 5173,
