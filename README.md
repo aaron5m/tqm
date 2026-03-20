@@ -6,6 +6,10 @@ This project builds with **docker** a lightweight mirror of subnets in a cloud V
 
 ---
 
+**Requirements:** Docker, A Server (nginx)
+
+---
+
 ## Architecture Overview
 
 ```
@@ -82,14 +86,13 @@ This separation enables small teams to experiment with **role-based responsibili
 ## Role-Based Workflow
 
 ```
-| Subnet / Layer       | Role / Responsibility        | Technology Stack   | Notes                        |
-|----------------------|------------------------------|--------------------|------------------------------|
-| Public Release       | Site Reliability Developer   | Nginx (or similar) | Serves static to external    |
-| Public Beta          | Frontend Developer           | React, Vite        | Hot reload, live development |
-| Private Subnet       | Backend Developer            | Node.js, FastAPI   | Internal API connections     |
-| Isolated Subnet      | Data Developer               | Postgres, SQLModel | Persistent, model-driven     |
+| Subnet / Layer  | Role / Responsibility      | Technology Stack   | Notes                        |
+|-----------------|----------------------------|--------------------|------------------------------|
+| Public Server   | Site Reliability Developer | Nginx (or similar) | Serves static to external    |
+| Public Beta     | Frontend Developer         | React, Vite        | Hot reload, live development |
+| Private Subnet  | Backend Developer          | Node.js, FastAPI   | Internal API connections     |
+| Isolated Subnet | Data Developer             | Postgres, SQLModel | Persistent, model-driven     |
 ```
-
 ---
 
 ## Development-Roles Workflow
@@ -149,7 +152,7 @@ git clone https://github.com/aaron5m/vnfm
 cp vnfm/* /var/www/
 ```
 
-2. Cd in and rename the .env.template file, for example
+2. Cd in and rename the .env.template file to .env, for example
 ```
 cd /var/www
 mv .env.template .env
@@ -165,7 +168,7 @@ VITE_PASS_URL=""
 API_SECRET=*
 VERIFICATION_REQUIRED=0
 ```
- - VITE_PASS_URL should be your domain name if you are going into production (https//yoursite.com)
+ - VITE_PASS_URL should equal your domain name if you are going into production (https//yoursite.com)
  - VERIFICATION_REQUIRED should be 1 if you are going into production  
    - you will need to add your own method for verification (e.g. email a link)
    - (you can manually verify with `docker compose exec node node admin.js verify $username`)
