@@ -230,6 +230,9 @@ npm install
 VITE_PASS_URL=https://your.domain npm run dev
 ```
 
+12. At any time simply rebuild for all your changes to take effect
+`docker compose up -d --build`
+
 ---
 
 ## Next Steps / Enhancements
